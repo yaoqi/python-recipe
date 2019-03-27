@@ -17,6 +17,5 @@ _book
 # eBook build output
 *.epub
 *.mobi
-*.pdf
 
 # End of https://www.gitignore.io/api/gitbook
