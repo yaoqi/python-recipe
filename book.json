@@ -13,6 +13,10 @@
         "expandable-chapters",
         "anchor-navigation-ex"
     ],
+    "pdf": {
+        "fontSize": 24,
+        "fontFamily": "microsoft yahei"
+    },
     "pluginsConfig": {
         "sharing": {
             "douban": false,
