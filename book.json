@@ -1,0 +1,62 @@
+{
+    "title": "a大的Python秘籍",
+    "author": "alphardex",
+    "description": "alphardex知乎专栏的文集",
+    "language": "zh-hans",
+    "plugins": [
+        "github",
+        "github-buttons",
+        "-sharing", "sharing-plus",
+        "-lunr", "-search", "search-plus",
+        "splitter",
+        "tbfed-pagefooter",
+        "expandable-chapters",
+        "anchor-navigation-ex"
+    ],
+    "pluginsConfig": {
+        "sharing": {
+            "douban": false,
+            "facebook": false,
+            "google": false,
+            "hatenaBookmark": false,
+            "instapaper": false,
+            "line": false,
+            "linkedin": false,
+            "messenger": false,
+            "pocket": false,
+            "qq": false,
+            "qzone": false,
+            "stumbleupon": false,
+            "twitter": false,
+            "viber": false,
+            "vk": false,
+            "weibo": false,
+            "whatsapp": false,
+            "all": [
+                "weibo", "qq", "qzone", "google", "douban"
+            ]
+        },
+        "github": {
+            "url": "https://github.com/alphardex/python-recipe"
+        },
+        "github-buttons": {
+            "buttons": [{
+                "user": "alphardex",
+                "repo": "python-recipe",
+                "type": "star",
+                "size": "large",
+                "count": true
+            }, {
+                "user": "alphardex",
+                "type": "follow",
+                "width": "230",
+                "count": true
+            }]
+        },
+        "tbfed-pagefooter": {
+            "copyright": "Copyright 2582347430@qq.com",
+            "modify_label": "修正时间：",
+            "modify_format": "YYYY-MM-DD HH:mm:ss"
+        }
+    }
+}
