@@ -13,5 +13,3 @@
   * [techattic——爬取优质的技术文章](techattic——爬取优质的技术文章.md)
   * [用flask实现RSSHub](用flask实现RSSHub.md)
   * [django开发小结](django开发小结.md)
-* [其他]()
-  * [Github上的优秀文章汇总](Github上的优秀文章汇总.md)
