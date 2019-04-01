@@ -244,14 +244,6 @@ a, b = b, a
 
 ## 字典
 
-### 遍历键值对
-
-``` python
->>> d = {'name': "alphardex", 'age': 24}
->>> [f'{key}: {value}' for key, value in d.items()]
-['name: alphardex', 'age: 24']
-```
-
 ### 推导式
 
 ``` python
@@ -264,6 +256,14 @@ a, b = b, a
 >>> d = {'name': 'alphardex', 'age': 24}
 >>> {v: k for k, v in d.items()}
 {'alphardex': 'name', 24: 'age'}
+```
+
+### 遍历键值对
+
+``` python
+>>> d = {'name': "alphardex", 'age': 24}
+>>> [f'{key}: {value}' for key, value in d.items()]
+['name: alphardex', 'age: 24']
 ```
 
 ### 键值对排序

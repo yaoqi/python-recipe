@@ -208,6 +208,10 @@ rest
 
 ## 对象
 
+### 推导式
+
+同样不在标准规范内，用map配合箭头函数代替
+
 ### 遍历键值对
 
 ``` javascript
@@ -215,10 +219,6 @@ let obj = {name: "alphardex", age: 24}
 Object.entries(obj).map(([key, value])=>`${key}: ${value}`)
 ["name: alphardex", "age: 24"]
 ```
-
-### 推导式
-
-同样不在标准规范内，用map配合箭头函数代替
 
 ### 键值对排序
 
