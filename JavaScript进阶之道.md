@@ -220,9 +220,7 @@ rest
 
 ## 对象
 
-### 推导式
-
-同样不在标准规范内，用高阶函数配合箭头函数代替
+### 反转键值对
 
 ``` javascript
 let obj = {name: 'alphardex', age: 24}
