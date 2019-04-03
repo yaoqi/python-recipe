@@ -53,13 +53,6 @@ fuck if condition else shit
 ['nameless', 'god']
 ```
 
-## 链式比较
-
-``` python
->>> 1 < 2 < 3
-True
-```
-
 ## 判断元素的存在性
 
 用in操作符可以判断一个元素是否存在于另一个元素中
@@ -85,7 +78,23 @@ True
 foo = lambda parameters: expression
 ```
 
-比如作为排序函数sorted的key
+### map - 映射
+
+``` python
+>>> numbers = [1, 2, 3, 4, 5]
+>>> list(map(lambda e: e ** 2, numbers))
+[1, 4, 9, 16, 25]
+```
+
+### filter - 过滤
+
+``` python
+values = [None, 0, '', True, 'alphardex', 666]
+list(filter(lambda e:e, values))
+[True, "alphardex", 666]
+```
+
+### sort - 排序
 
 ``` python
 >>> tuples = [(1, 'kirito'), (2, 'asuna'), (4, 'alice'), (3, 'eugeo')]
@@ -93,22 +102,28 @@ foo = lambda parameters: expression
 [(4, 'alice'), (2, 'asuna'), (3, 'eugeo'), (1, 'kirito')]
 ```
 
-亦或是作为map函数的function
+### 其他骚操作
 
-例子：获取当前路径下所有pdf文件的路径并转为字符串
-
-``` python
->>> from pathlib import Path
->>> pdf_paths = list(map(str, Path('.').glob('*.pdf')))
-```
-
-实现1到100的积
+求1到100的积
 
 ``` python
 >>> from functools import reduce
 >>> reduce(lambda x, y: x * y, range(1, 101))
 # 求和就更简单了
 >>> sum(range(101))
+```
+
+扁平化列表
+
+``` python
+>>> from functools import reduce
+>>> li = [[1,2,3],[4,5,6], [7], [8,9]]
+>>> flatten = lambda li: [item for sublist in li for item in sublist]
+>>> flatten(li)
+# 或者直接用more_itertools这个第三方模块
+# from more_itertools import flatten
+# list(flatten(li))
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
 ## 偏函数
@@ -211,12 +226,7 @@ print([f'{s} {p}' for s, p in zip(subjects, predicates)])
 >>> li = [3, 1, 2, 1, 3, 4, 5, 6]
 >>> list(set(li))
 [1, 2, 3, 4, 5, 6]
-```
-
-如果想保留原先的顺序呢？用sorted就行了
-
-``` python
->>> li = [3, 1, 2, 1, 3, 4, 5, 6]
+# 如果要保留原先顺序的话用如下方法即可
 >>> sorted(set(li), key=li.index)
 [3, 1, 2, 4, 5, 6]
 ```
@@ -246,11 +256,7 @@ a, b = b, a
 
 ### 推导式
 
-``` python
-{key: value for key, value in iterable}
-```
-
-反转字典简直小菜一碟
+利用它反转字典简直小菜一碟
 
 ``` python
 >>> d = {'name': 'alphardex', 'age': 24}

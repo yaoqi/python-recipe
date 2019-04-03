@@ -36,13 +36,6 @@ name.split(' ')
 ['nameless', 'god']
 ```
 
-## 链式比较
-
-``` javascript
-1 < 2 < 3
-true
-```
-
 ## 判断元素的存在性
 
 ``` javascript
@@ -67,7 +60,7 @@ true
 let foo = (parameters) => expression
 ```
 
-用map函数来映射每一个元素
+### map - 映射
 
 ``` javascript
 let numbers = [1, 2, 3, 4, 5];
@@ -75,7 +68,7 @@ numbers.map(e=>e ** 2)
 [1, 4, 9, 16, 25]
 ```
 
-用filter去除所有假值
+### filter - 过滤
 
 ``` javascript
 let values = [null, undefined, NaN, 0, '', true, 'alphardex', 666]
@@ -83,7 +76,7 @@ values.filter(e=>e)
 [true, "alphardex", 666]
 ```
 
-作为排序函数sort的参数
+### sort - 排序
 
 ``` javascript
 let numbers = [4, 2, 5, 1, 3];
@@ -91,12 +84,25 @@ numbers.sort((a, b)=>b-a)
 [5, 4, 3, 2, 1]
 ```
 
+### 其他骚操作
+
 求1到100的和
 
 ``` javascript
 [...Array(101).keys()].reduce((a, b)=>a+b)
 // 或者用lodash实现，写法简直跟Python一模一样
-_.sum(_.range(101))
+// _.sum(_.range(101))
+```
+
+扁平化数组
+
+``` javascript
+const flatten = (arr, depth=1) => arr.reduce((a, v)=>a.concat(depth>1 && Array.isArray(v)?flatten(v, depth-1):v), [])
+let arr = [1, [2, 3, ['a', 'b', 4], 5], 6]
+flatten(arr, 2)
+// 或者用ES10新增的flat
+// arr.flat(2)
+[1, 2, 3, "a", "b", 4, 5, 6]
 ```
 
 ## 偏函数
@@ -141,7 +147,13 @@ foo(1, 2)
 
 ### 推导式
 
-由于推导式暂时不在标准规范内，因此用map配合箭头函数代替
+由于推导式暂时不在标准规范内，因此用高阶函数配合箭头函数代替
+
+``` javascript
+let even = [...Array(10).keys()].filter(e=>e%2!==1)
+even
+[0, 2, 4, 6, 8]
+```
 
 ### 同时迭代元素与其索引
 
@@ -210,7 +222,15 @@ rest
 
 ### 推导式
 
-同样不在标准规范内，用map配合箭头函数代替
+同样不在标准规范内，用高阶函数配合箭头函数代替
+
+``` javascript
+let obj = {name: 'alphardex', age: 24}
+Object.fromEntries(Object.entries(obj).map(([key, value])=>[value, key]))
+{24: "age", alphardex: "name"}
+// 或者用lodash实现
+// _.invert(obj)
+```
 
 ### 遍历键值对
 
