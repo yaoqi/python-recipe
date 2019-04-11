@@ -6,8 +6,6 @@
 
 大量的封装虽然牺牲了一定的灵活性，但大大提高了开发效率，或许这就是django的哲学吧。
 
-<!--more-->
-
 ## 准备
 
 首先，你可以用django-admin来生成你的项目。
@@ -26,11 +24,11 @@ Django的核心是MVC，更准确来说是MVT（Model-View-Template）
 2. 在views.py中编写视图函数，并在urls.py中为其创建相应的映射
 3. 在templates文件夹中编写要渲染的模板HTML
 
-数据模型的定义其实就是定义各种各样的Field，记不住的话速查就行（其他各种api同理）。
+数据模型的定义其实就是定义各种各样的字段，还有个Meta类可以定义一些元数据（比如字段的排序等），此外你也可以为模型封装一些method来简化视图的编写。
 
 视图函数的编写主要涉及以下方面：模型的CRUD、表单的处理、模板的上下文渲染（必须熟悉HTTP）
 
-视图函数分2种：函数和类（即FBV和CBV）。本人更倾向于前者，因为灵活度较高（flask亦是如此），当然功能单一的视图可以考虑用类视图来简化流程。
+视图函数分2种：函数和类（即FBV和CBV）。两者各有利弊，根据需求自行权衡。目前来说后者在django中比较流行。
 
 给视图添加额外功能：FBV用装饰器，CBV用Mixin。
 
@@ -46,6 +44,8 @@ Django的核心是MVC，更准确来说是MVT（Model-View-Template）
 
 - 数据模型的Meta元信息（ordering、abstract等）
 - 利用Manager来简化查询
+- 熟悉QuerySet的各种接口和查询方法（比如Q、select\_related等）
+- 懂得如何优化查询
 - 利用Library实现自定义标签
 - 创建sitemaps来优化SEO
 - 创建feeds来提供RSS订阅功能
@@ -56,7 +56,7 @@ Django的核心是MVC，更准确来说是MVT（Model-View-Template）
 - 利用Redis实现各种功能（缓存、计数、排行榜等）
 - 利用sessions在服务端存储数据（比如购物车）
 - 利用celery实现异步任务（比如邮件发送）
-- 定制admin（比如给actions添加导出csv功能）
+- 定制admin
 - 数据模型的继承（abstract、multi-table、proxy）
 - 自定义数据模型字段
 - 用Mixin为类视图添加额外功能
@@ -78,8 +78,9 @@ Django的核心是MVC，更准确来说是MVT（Model-View-Template）
 - django-taggit：提供简单的打标签功能
 - django-braces：为类视图提供一系列Mixin
 - django-embed-video：为页面嵌入视频
-- django-imagekit：图像处理
 - djangorestframework：大名鼎鼎的drf，为django提供RESTful API支持
+- django-xadmin：一个更强大的admin后台
+- django-ckeditor：为表单提供富文本编辑器
 - markdown：提供Markdown渲染支持
 - pillow：图像处理
 - sorl-thumbnail：缩略图生成

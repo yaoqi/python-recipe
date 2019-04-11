@@ -2,70 +2,17 @@ flask是一个Python语言开发的web“微框架”，和django不同的是，
 
 本文简要地阐述了flask本身的核心知识（不涉及任何扩展）
 
-想快速上手的也可直接看[官方文档](http://flask.pocoo.org/docs/1.0/quickstart/)
+## 脚手架
 
-<!--more-->
+为了迅速搭建一个像样的flask网站，我们可以使用脚手架
 
-## app实例
+之前在Github上看到cookiecutter-flask，是个不错的选择，但是新手可能会看不懂里面代码是如何封装的
 
-创建app实例
+于是本人做出了一个更user-friendly的脚手架——[cookiecutter-flask-bootstrap](https://github.com/alphardex/cookiecutter-flask-bootstrap)
 
-```python
-from flask import Flask
-app = Flask(__name__)
-```
+这个脚手架的功能大致和上个脚手架差不多，不过更加轻量化，而且结构更加清晰明了，best practice也基本都做到了，希望大家用的开心。
 
-### 配置
-
-建议把配置分成3类：开发配置、测试配置和生产配置，方便随时切换
-
-以下就是config.py
-
-```python
-import os
-import sys
-
-basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-WIN = sys.platform.startswith('win')
-prefix = 'sqlite:///' if WIN else 'sqlite:////'
-
-
-class BaseConfig:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev key'
-    ...
-
-
-class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
-
-
-class TestingConfig(BaseConfig):
-    TESTING = True
-    WTF_CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-
-
-class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', prefix + os.path.join(basedir, 'data.db'))
-
-
-config = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig
-}
-
-```
-
-以对象实例的方式导入app
-
-```python
-import os
-from app.config import config
-
-config_name = os.getenv('FLASK_CONFIG', 'development')
-app.config.from_object(config[config_name])
-```
+最后还要感谢李辉大大的[狼书](https://book.douban.com/subject/30310340/)，给了我很大的帮助
 
 ## 路由
 
@@ -129,44 +76,16 @@ HTTP methods的用处如下：
 ```python
 @app.route('/rss')
 def rss():
-    articles = Article.query.order_by(db.desc('date')).limit(10)
+    articles = Article.query.order_by(Article.date.desc).limit(10)
     rss = render_template('rss.xml', articles=articles)
     response = make_response(rss)
     response.mimetype = 'application/xml'
     return response
 ```
 
-## 命令
-
-运行命令前必须设置好环境变量（比如FLASK_APP)
-
-推荐用python-dotenv将环境变量以.flaskenv和.env（敏感信息）形式保存到本地
-
-运行flask
-
-```bash
-$ flask run
-```
-
-运行包含app上下文的shell
-
-```bash
-$ flask shell
-```
-
-自定义命令（更多请参考[click文档](http://click.pocoo.org/)）
-
-```python
-@app.cli.command()
-@click.option('--username', help='user that you greet', default='alphardex')
-def greet(username):
-    """Greet someone."""
-    click.echo(f'Hello, {username}!')
-```
-
 ## 模板
 
-渲染一个模板，简言之就是通过变量来生成HTML
+渲染一个模板，简言之就是通过上下文变量来生成HTML
 
 ```python
 from flask import render_template
@@ -177,14 +96,13 @@ def index():
     return render_template('index.html', greetings=greetings)
 ```
 
-模板存放在templates文件夹中，比如上面的index.html
+render\_template中第一个参数是要渲染的模板文件名，**其余参数则是上下文变量**
 
 ```html
-<!doctype html>
 <h1>{{ greetings }}</h1>
 ```
 
-通过mustache语法将变量传入模板并渲染，同时也支持if、for等控制流语句语法，更高级的有过滤器、模板继承、宏等
+通过mustache语法将上下文变量传入模板并渲染，同时也支持if、for等控制流语句语法，更高级的有过滤器、模板继承、宏等
 
 过滤器的添加格式如下所示
 
@@ -259,18 +177,16 @@ def create_app(config_name=None):
 
 def register_extensions(app):
     debugtoolbar.init_app(app)
-    db.init_app(app)
     ...
 
 def register_blueprints(app):
     app.register_blueprint(main_bp)
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(user_bp, url_prefix='/user')
+    ...
 
 def register_shell_context(app):
     @app.shell_context_processor
     def make_shell_context():
-        return {'db': db, 'User': User}
+        return {'db': db, ...}
 
 def register_errors(app):
     @app.errorhandler(400)
@@ -337,20 +253,6 @@ def log_out():
 
 最后别忘记在工厂函数中用register\_blueprint注册一下
 
-## 脚手架
-
-为了迅速搭建一个像样的flask网站，我们可以使用脚手架
-
-之前看到PegasusWang推荐的cookiecutter-flask，是个不错的选择，但是新手可能会看不懂里面代码是如何封装的
-
-于是本人做出了一个更user-friendly的脚手架——[cookiecutter-flask-bootstrap](https://github.com/alphardex/cookiecutter-flask-bootstrap)
-
-这个脚手架的功能大致和上个脚手架差不多，不过更加轻量化，而且结构更加清晰明了，best practice也基本都做到了
-
-希望大家用的开心
-
-最后还要感谢李辉大大的狼书，给了我很大的帮助
-
 ## 高级玩法
 
 flask是基于werkzeug实现的，因此有些高级的玩法也得借助它完成
@@ -362,6 +264,7 @@ flask是基于werkzeug实现的，因此有些高级的玩法也得借助它完�
 ``` python
 from flask import Flask
 from urllib.parse import unquote
+from werkzeug.routing import BaseConverter
 
 class ListConverter(BaseConverter):
     def __init__(self, url_map, separator='+'):
@@ -444,57 +347,14 @@ def foo():
     return {'message': 'Hello foo!'}
 ```
 
-### 用方法视图实现Restful API
-
-flask可以说是写Restful API的利器
-
-虽说诸如flask-restful之类扩展为我们提供了便利，但是用flask提供的[MethodView](http://flask.pocoo.org/docs/1.0/views/#method-views-for-apis)写API同样也很方便
-
-``` python
-from flask import Flask, jsonify
-from flask.views import MethodView
-
-class ItemsAPI(MethodView):
-
-    def get(self):
-        # get todo items
-
-    def post(self):
-        # create a todo item
-
-class ItemAPI(MethodView):
-
-    def get(self, item_id):
-        # get a todo item
-
-    def put(self, item_id):
-        # modify a todo item
-
-    def patch(self, item_id):
-        # toggle a todo item
-
-    def delete(self, item_id):
-        # delete a todo item
-
-app = Flask(__name__)
-bp.add_url_rule('/todo/items', view_func=ItemsAPI.as_view('items'), methods=['GET', 'POST'])
-app.add_url_rule('/todo/items/<int:item_id>', view_func=ItemAPI.as_view('item'), methods=['GET', 'PUT', 'PATCH', 'DELETE'])
-```
-
-以上就可以实现一个简单的TODO List服务
-
 ### 用ptpython替换默认的shell
 
-[ptpython](https://github.com/prompt-toolkit/ptpython)是一个支持代码高亮和自动补全的repl，本人的最爱。把它集成到cli上也挺简单的，关键是添加上下文
+[ptpython](https://github.com/prompt-toolkit/ptpython)是一个支持代码高亮和自动补全的repl，本人的最爱。
 
 ``` python
-from flask.cli import with_appcontext
 
 def register_cli(app):
-    ...
-
     @app.cli.command()
-    @with_appcontext
     def ptshell():
         """Use ptpython as shell."""
         try:
