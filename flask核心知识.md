@@ -1,7 +1,5 @@
 flask是一个Python语言开发的web“微框架”，和django不同的是，它既没有数据库、也没有表单验证等工具它本身仅仅提供了一个WSGI的桥梁，其他东西统统靠你来定制，具有很大的灵活性
 
-本文简要地阐述了flask本身的核心知识（不涉及任何扩展）
-
 ## 脚手架
 
 为了迅速搭建一个像样的flask网站，我们可以使用脚手架
@@ -249,9 +247,28 @@ def log_out():
 
 蓝本也可以注册路由，如果反向构造url的话就得加上蓝本名，比如url\_for('auth.login')
 
-通过上文便可得知，蓝本的注册应在工厂函数中执行，并且每个蓝本可以通过url\_prefix来给url添加前缀
+蓝本的注册应在工厂函数中执行，并且每个蓝本可以通过url\_prefix来给url添加前缀
 
-最后别忘记在工厂函数中用register\_blueprint注册一下
+## 常用插件
+
+- flask-admin：提供admin管理后台
+- flask-avatars：生成用户头像
+- flask-ckeditor：集成富文本编辑器ekeditor
+- flask-cors：提供跨域支持
+- flask-dropzone：集成文件上传插件dropzone
+- flask-login：处理用户登陆认证逻辑
+- flask-mail：邮箱服务
+- flask-migrate：提供数据库迁移支持
+- flask-moment：提供时间规范化支持
+- flask-mongoengine：集成mongoengine——面向mongodb的ORM
+- flask-restful：RESTful API支持
+- flask-socketio：集成socketio，常用于编写聊天室
+- flask-sqlalchemy：集成sqlalchemy——面向标准SQL的ORM
+- flask-weasyprint：提供PDF打印功能
+- flask-whooshee：集成whooshee——全文搜索引擎
+- flask-wtf：集成wtforms——表单支持
+- bootstrap-flask：集成bootstrap，并提供一些有用的宏
+- faker：能生成假数据，用于测试
 
 ## 高级玩法
 
