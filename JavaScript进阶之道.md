@@ -9,6 +9,7 @@ Python和JavaScript在笔者看来是很相似的语言，本文归纳了JavaScr
 ``` javascript
 let name = 'alphardex'
 `Ore wa ${name} desu, ${4 * 6} sai, gakusei desu.`
+// "Ore wa  desu, 24 sai, gakusei desu."
 ```
 
 ## 三元运算符
@@ -27,23 +28,23 @@ let name = 'alphardex'
 ``` javascript
 let letters = ['h', 'e', 'l', 'l', 'o']
 letters.join('')
-"hello"
+// "hello"
 letters.reverse()
-["o", "l", "l", "e", "h"]
+// ["o", "l", "l", "e", "h"]
 let name = 'nameless god'
 name.split(' ')
-['nameless', 'god']
+// ['nameless', 'god']
 ```
 
 ## 判断元素的存在性
 
 ``` javascript
 'fuck you'.includes('fuck')
-true
+// true
 ['bitch', 'whore'].includes('slut')
-false
+// false
 'company' in {'title': 'SAO III', 'company': 'A1 Pictures'}
-true
+// true
 ```
 
 # 函数
@@ -64,7 +65,7 @@ let foo = (parameters) => expression
 ``` javascript
 let numbers = [1, 2, 3, 4, 5];
 numbers.map(e=>e ** 2)
-[1, 4, 9, 16, 25]
+// [1, 4, 9, 16, 25]
 ```
 
 ### filter - 过滤
@@ -72,7 +73,7 @@ numbers.map(e=>e ** 2)
 ``` javascript
 let values = [null, undefined, NaN, 0, '', true, 'alphardex', 666]
 values.filter(e=>e)
-[true, "alphardex", 666]
+// [true, "alphardex", 666]
 ```
 
 ### sort - 排序
@@ -80,7 +81,7 @@ values.filter(e=>e)
 ``` javascript
 let numbers = [4, 2, 5, 1, 3];
 numbers.sort((a, b)=>b-a)
-[5, 4, 3, 2, 1]
+// [5, 4, 3, 2, 1]
 ```
 
 ### 其他骚操作
@@ -89,6 +90,7 @@ numbers.sort((a, b)=>b-a)
 
 ``` javascript
 [...Array(101).keys()].reduce((a, b)=>a+b)
+// 5050
 // 或者用lodash实现，写法简直跟Python一模一样
 // _.sum(_.range(101))
 ```
@@ -99,9 +101,9 @@ numbers.sort((a, b)=>b-a)
 const flatten = (arr, depth=1) => arr.reduce((a, v)=>a.concat(depth>1 && Array.isArray(v)?flatten(v, depth-1):v), [])
 let arr = [1, [2, 3, ['a', 'b', 4], 5], 6]
 flatten(arr, 2)
+// [1, 2, 3, "a", "b", 4, 5, 6]
 // 或者用ES10新增的flat
 // arr.flat(2)
-[1, 2, 3, "a", "b", 4, 5, 6]
 ```
 
 ## 偏函数
@@ -112,9 +114,9 @@ flatten(arr, 2)
 let multiply = (a, b) => a*b
 let double = a => multiply(a, 2)
 multiply(3, 4)
-12
+// 12
 double(4)
-8
+// 8
 ```
 
 ## 扩展运算符
@@ -125,11 +127,11 @@ double(4)
 let arr1 = ['a', 'b']
 let arr2 = [1, 2]
 [...arr1, ...arr2]
-['a', 'b', 1, 2]
+// ['a', 'b', 1, 2]
 let obj1 = {'name': 'alphardex'}
 let obj2 = {'age': 24}
 {...obj1, ...obj2}
-{name: 'alphardex', age: 24}
+// {name: 'alphardex', age: 24}
 ```
 
 ### 函数参数的打包
@@ -137,7 +139,7 @@ let obj2 = {'age': 24}
 ``` javascript
 let foo = (...args) => console.log(args)
 foo(1, 2)
-[1, 2]
+// [1, 2]
 ```
 
 # 数据结构
@@ -151,7 +153,7 @@ foo(1, 2)
 ``` javascript
 let even = [...Array(10).keys()].filter(e=>e%2!==1)
 even
-[0, 2, 4, 6, 8]
+// [0, 2, 4, 6, 8]
 ```
 
 ### 同时迭代元素与其索引
@@ -161,7 +163,7 @@ even
 ``` javascript
 let li = ['a', 'b', 'c']
 li.map((e, i)=>`${i+1}. ${e}`)
-["1. a", "2. b", "3. c"]
+// ["1. a", "2. b", "3. c"]
 ```
 
 ### 元素的追加与连接
@@ -172,10 +174,10 @@ push在末尾追加元素，concat在末尾连接元素
 let li = [1, 2, 3]
 li.push([4, 5])
 li
-[1, 2, 3, [4, 5]]
+// [1, 2, 3, [4, 5]]
 li.concat([4, 5])
 li
-[1, 2, 3, [4, 5], 4, 5]
+// [1, 2, 3, [4, 5], 4, 5]
 ```
 
 ### 测试是否整体/部分满足条件
@@ -184,9 +186,9 @@ every测试所有元素是否都满足于某条件，some则是测试部分元�
 
 ``` javascript
 [1, 2, 3, 4, 5].every(e=>e<20)
-true
+// true
 [1, 3, 4, 5].some(e=>e%2===0)
-true
+// true
 ```
 
 ### 同时迭代2个以上的数组
@@ -197,7 +199,7 @@ true
 let subjects = ['nino', 'miku', 'itsuki']
 let predicates = ['saikou', 'ore no yome', 'is sky']
 subjects.map((e,i)=>`${e} ${predicates[i]}`)
-["nino saikou", "miku ore no yome", "itsuki is sky"]
+// ["nino saikou", "miku ore no yome", "itsuki is sky"]
 ```
 
 ### 去重
@@ -207,7 +209,7 @@ subjects.map((e,i)=>`${e} ${predicates[i]}`)
 ``` javascript
 let li = [3, 1, 2, 1, 3, 4, 5, 6]
 [...new Set(li)]
-[3, 1, 2, 4, 5, 6]
+// [3, 1, 2, 4, 5, 6]
 ```
 
 ### 解构赋值
@@ -223,9 +225,9 @@ let [a, b] = [b, a]
 ``` javascript
 let [first, ...rest] = [1, 2, 3, 4]
 first
-1
+// 1
 rest
-[2, 3, 4]
+// [2, 3, 4]
 ```
 
 ## 对象
@@ -235,11 +237,11 @@ rest
 ``` javascript
 let obj = {name: "alphardex", age: 24}
 Object.keys(obj)
-["name", "age"]
+// ["name", "age"]
 Object.values(obj)
-["alphardex", 24]
+// ["alphardex", 24]
 Object.entries(obj).map(([key, value])=>`${key}: ${value}`)
-["name: alphardex", "age: 24"]
+// ["name: alphardex", "age: 24"]
 ```
 
 ### 排序
@@ -247,6 +249,7 @@ Object.entries(obj).map(([key, value])=>`${key}: ${value}`)
 ``` javascript
 let data = [{'rank': 2, 'author': 'beta'}, {'rank': 1, 'author': 'alpha'}]
 data.sort((a, b)=>a.rank - b.rank)
+// [{'rank': 1, 'author': 'alpha'}, {'rank': 2, 'author': 'beta'}]
 ```
 
 ### 反转
@@ -254,7 +257,7 @@ data.sort((a, b)=>a.rank - b.rank)
 ``` javascript
 let obj = {name: 'alphardex', age: 24}
 Object.fromEntries(Object.entries(obj).map(([key, value])=>[value, key]))
-{24: "age", alphardex: "name"}
+// {24: "age", alphardex: "name"}
 // 或者用lodash实现
 // _.invert(obj)
 ```
