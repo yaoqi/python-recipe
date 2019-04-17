@@ -1,3 +1,5 @@
+# 某科学的Python小册
+
 > 人生は辛くて短くて、だからPythonを使ってください！
 —— alphardex
 

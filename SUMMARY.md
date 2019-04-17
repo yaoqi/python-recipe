@@ -1,6 +1,6 @@
 # Summary
 
-* [前言](README.md)
+* [某科学的Python小册](README.md)
 * [Python]()
   * [Python进阶之道](Python进阶之道.md)
   * [Python标准库一览](Python标准库一览.md)
