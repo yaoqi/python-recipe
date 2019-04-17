@@ -49,7 +49,7 @@ True
 
 # 函数
 
-## lambda
+## 匿名函数
 
 类似ES6的箭头函数，函数的简化写法，配合map、filter、sort等食用更佳
 
@@ -173,9 +173,9 @@ list(filter(lambda e:e, values))
 ['1. a', '2. b', '3. c']
 ```
 
-### append和extend
+### 元素的追加与连接
 
-前者在末尾追加元素，后者在末尾连接元素
+append在末尾追加元素，extend在末尾连接元素
 
 ``` python
 >>> li = [1, 2, 3]
@@ -185,6 +185,17 @@ list(filter(lambda e:e, values))
 >>> li.extend([4, 5])
 >>> li
 [1, 2, 3, [4, 5], 4, 5]
+```
+
+### 测试是否整体/部分满足条件
+
+all测试所有元素是否都满足于某条件，any则是测试部分元素是否满足于某条件
+
+``` python
+>>> all([e<20 for e in [1, 2, 3, 4, 5]])
+True
+>>> any([e%2==0 for e in [1, 3, 4, 5]])
+False
 ```
 
 ### 同时迭代2个以上的可迭代对象
