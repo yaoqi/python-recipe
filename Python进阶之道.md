@@ -51,7 +51,7 @@ name.split(' ')
 
 ## 匿名函数
 
-类似ES6的箭头函数，函数的简化写法，配合map、filter、sort等食用更佳
+类似ES6的箭头函数，函数的简化写法，配合map、filter、sorted等高阶函数食用更佳
 
 ``` python
 # def foo(parameters):
@@ -85,10 +85,9 @@ sorted(tuples, key=lambda x: x[1])
 
 ### 其他骚操作
 
-求1到100的积
-
 ``` python
 from functools import reduce
+# 求1到100的积
 reduce(lambda x, y: x * y, range(1, 101))
 # 求和就更简单了
 sum(range(101))

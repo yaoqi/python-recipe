@@ -8,7 +8,7 @@ flask是一个Python语言开发的web“微框架”，和django不同的是，
 
 于是本人做出了一个更user-friendly的脚手架——[cookiecutter-flask-bootstrap](https://github.com/alphardex/cookiecutter-flask-bootstrap)
 
-这个脚手架的功能大致和上个脚手架差不多，不过更加轻量化，而且结构更加清晰明了，best practice也基本都做到了，希望大家用的开心。
+这个脚手架的功能大致和上个脚手架差不多，不过更加轻量化，而且结构更加清晰明了，best practice也基本都做到了，希望大家用的开心:d
 
 最后还要感谢李辉大大的[狼书](https://book.douban.com/subject/30310340/)，给了我很大的帮助
 
@@ -110,14 +110,12 @@ render\_template中第一个参数是要渲染的模板文件名，**其余参�
 
 提几个常用的过滤器：
 
-* safe: 避免HTML的自动转义，本质上是个Markup对象
-* length: 获取变量长度
-* default: 为变量设置默认值
-* trim: 去除变量前后的空格
-* tojson: 将变量转化为json
-* truncate: 截断字符串，常用于显示文章摘要
-
-模板语法具体可看[jinja2文档](http://jinja.pocoo.org/docs/2.10/templates/)
+- safe: 避免HTML的自动转义，本质上是个Markup对象
+- length: 获取变量长度
+- default: 为变量设置默认值
+- trim: 去除变量前后的空格
+- tojson: 将变量转化为json
+- truncate: 截断字符串，常用于显示文章摘要
 
 网站的静态文件放在static文件夹中，通过反向构造url访问
 
@@ -127,10 +125,10 @@ url_for('static', filename='style.css')
 
 ## 上下文全局变量
 
-* current_app：指向处理请求的app实例
-* g：global的简写，以object的方式存储信息（比如用户登录后的用户对象 g.user）
-* request：以dict形式存储HTTP请求相关变量
-* session：以dict的方式存储会话信息（比如用户登录后的用户id session['user_id']）
+- current_app：指向处理请求的app实例
+- g：global的简写，以object的方式存储信息（比如用户登录后的用户对象 g.user）
+- request：以dict形式存储HTTP请求相关变量
+- session：以dict的方式存储会话信息（比如用户登录后的用户id session['user_id']）
 
 以下是request所封装的几个最常用的参数，全部参数请点[这里](http://flask.pocoo.org/docs/1.0/api/?highlight=args#incoming-request-data)
 
@@ -149,10 +147,10 @@ request.get_json()  # 获取api的json数据
 
 ## 工具函数
 
-* abort：放弃请求
-* flash：闪现信息，可以附带类别
-* jsonify：将数据序列化为json，常用于设计restful api
-* redirect：重定向
+- abort：放弃请求
+- flash：闪现信息，可以附带类别
+- jsonify：将数据序列化为json，常用于设计restful api
+- redirect：重定向
 
 ## 工厂模式
 
@@ -311,11 +309,11 @@ def list2(var):
 访问如下链接体验下效果
 
 ```
-http://localhost:9000/list1/python+javascript+sql
-http://localhost:9000/list2/python|javascript|sql
+http://localhost:5000/list1/python+javascript+sql
+http://localhost:5000/list2/python|javascript|sql
 ```
 
-### 强制响应格式为json
+### 强制响应格式
 
 API返回的一般都是json，故在每个视图函数中调用jsonify将dict序列化为json
 
@@ -333,7 +331,7 @@ def foo():
     return jsonify({'message': 'Hello foo!'})
 ```
 
-但其实没必要这么做，因为flask的Response是可以定制的
+但其实没必要这么做，因为**flask的Response是可以定制的**
 
 flask的app实例提供了response\_class属性，默认是Response
 
@@ -342,8 +340,7 @@ flask的app实例提供了response\_class属性，默认是Response
 通过查阅BaseResponse，我们可以重载Response的force\_type类方法，将类型为dict的response直接jsonify，并且无需在每个视图函数中都显式调用jsonify函数了
 
 ``` python
-from flask import Flask, jsonify
-from werkzeug.wrappers import Response
+from flask import Flask, jsonify, Response
 
 class JSONResponse(Response):
     @classmethod
@@ -364,19 +361,23 @@ def foo():
     return {'message': 'Hello foo!'}
 ```
 
-### 用ptpython替换默认的shell
-
-[ptpython](https://github.com/prompt-toolkit/ptpython)是一个支持代码高亮和自动补全的repl，本人的最爱。
+当然，你也可以类似地强制响应格式为xml，[RSSHub](https://github.com/alphardex/RSSHub-python)就是这么实现的
 
 ``` python
+from flask import Flask, Response
 
-def register_cli(app):
-    @app.cli.command()
-    def ptshell():
-        """Use ptpython as shell."""
-        try:
-            from ptpython.repl import embed
-            embed(app.make_shell_context())
-        except ImportError:
-            click.echo('ptpython not installed! Use the default shell instead.')
+class XMLResponse(Response):
+    def __init__(self, response, **kwargs):
+        if 'mimetype' not in kwargs and 'contenttype' not in kwargs:
+            if response.startswith('<?xml'):
+                kwargs['mimetype'] = 'application/xml'
+        return super().__init__(response, **kwargs)
+
+app = Flask(__name__)
+app.response_class = XMLResponse
+
+@bp.route('/feed')
+def rss_feed():
+    from rsshub.spiders.feed import ctx
+    return render_template('main/atom.xml', ctx())
 ```

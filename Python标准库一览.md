@@ -1,9 +1,5 @@
 想掌握Python标准库，读它的[官方文档](https://docs.python.org/3.6/library/index.html)很重要。本文并非此文档的复制版，而是对每一个库的一句话概括以及它的主要函数，由此用什么库心里就会有数了。
 
-此文配合[Python进阶之道](https://zhuanlan.zhihu.com/p/35219750)食用更佳~
-
-<!--more-->
-
 ## 文本处理
 
 - string: 提供了字符集：ascii\_lowercase, ascii\_uppercase, digits, hexdigits, punctuation
@@ -36,9 +32,10 @@
 
 ## 文件目录访问
 
-- pathlib: 路径对象: Path
+- pathlib: 对路径对象进行操作，完美替代os.path: Path
 - fileinput: 读取一个或多个文件并处理行: input
 - filecmp: 比较两个文件是否相同: cmp
+- tempfile：用来创建临时文件，一关闭就自动删除：TemporaryFile
 - linecache: 读取文件的行，缓存优化: getline, getlines
 - shutil: 文件操作: copy, copytree, rmtree, move, make\_archive
 
@@ -54,7 +51,8 @@
 
 ## 密码学
 
-hashlib: 哈希加密算法: sha256, hexdigest
+- hashlib: 哈希加密算法: sha256, hexdigest
+- secrets：密钥生成：token\_bytes, token\_hex, token\_urlsafe
 
 ## 操作系统
 
@@ -77,21 +75,18 @@ hashlib: 哈希加密算法: sha256, hexdigest
 
 ## 进程间通信和网络
 
-- socket: 套接字，常用于服务器开发
-- ssl: HTTPS访问
-- select, selector: 多路复用I/O
-- asyncio: 异步IO, eventloop, 协程: get\_event\_loop, run\_until\_complete, wait, async, await
+- asyncio: 异步IO, eventloop, 协程: get\_event\_loop, run\_until\_complete, wait, async和await关键字
 
 ## 网络数据处理
 
-- email: 处理email
+- email: 处理email，建议用[yagmail](https://github.com/kootenpv/yagmail)代替
 - json: 处理json: dumps, loads
 - base64: 处理base64编码: b64encode, b64decode
 
 ## 结构化标记语言工具
 
 - html: 转义html: escape, unescape
-- html.parser: 解析html
+- html.parser: 解析html，建议用[parsel](https://github.com/scrapy/parsel)代替
 
 ## 网络协议支持
 
@@ -100,7 +95,7 @@ hashlib: 哈希加密算法: sha256, hexdigest
 - uuid: 通用唯一识别码: uuid1, uuid3, uuid4, uuid5
 - ftplib, poplib, imaplib, nntplib, smptlib, telnetlib: 实现各种网络协议
 
-其余库用requests代替
+其余库用[requests](https://github.com/kennethreitz/requests)代替
 
 ## 程序框架
 
@@ -110,7 +105,7 @@ hashlib: 哈希加密算法: sha256, hexdigest
 
 ## GUI
 
-tkinter：可用[pysimplegui](https://github.com/MikeTheWatchGuy/PySimpleGUI)代替，超好用
+- tkinter：可用[pysimplegui](https://github.com/MikeTheWatchGuy/PySimpleGUI)代替，超好用
 
 ## 开发工具
 
@@ -137,13 +132,8 @@ tkinter：可用[pysimplegui](https://github.com/MikeTheWatchGuy/PySimpleGUI)代
 - \_\_main\_\_: 顶层运行环境，使得python文件既可以独立运行，也可以当做模块导入到其他文件。
 - warnings: 警告功能（代码过时等）: warn
 - contextlib: 上下文管理器实现: @contextmanager
+- inspect：用于获取对象的各种信息（自省）
 
 ## 自定义Python解释器
 
-code: 实现自定义的Python解释器（比如Scrapy的shell）: interact
-
-## 未提及的库
-
-difflib, textwrap, unicodedata, stringprep, rlcompleter, struct, codecs, weakref, types, reprlib, numbers, cmath, decimal, stat, tempfile, fnmatch, macpath, copyreg, shelve, marshal, zlib, gzip, bz2, lzma, zipfile, tarfile, netrc, xdrlib, plistlib, audioop, aifc, sunau, wave, chunk, colorsys, imghdr, sndhdr, bdb, faulthandler, trace, tracemalloc, abc, atexit, gc, inspect, site, hmac, secrets, signal, mmap, mailcap, mailbox, mimetypes, binhex, binascii, quopri, uu, errn, traceback, ctypes
-
-未提及的理由：这些库笔者没怎么用过，或者本身就不怎么常用，如果觉得有用的话可以自行查看它们的官方文档。
+- code: 实现自定义的Python解释器（比如Scrapy的shell）: interact
