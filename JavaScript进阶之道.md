@@ -1,7 +1,6 @@
 Python和JavaScript在笔者看来是很相似的语言，本文归纳了JavaScript的各种tricks，相对于[之前的Python版](https://zhuanlan.zhihu.com/p/35219750)。
 
 两篇文章都读完，有没有发现它们的目录结构是一个样的呢XD
-<!--more-->
 
 # 基本
 
@@ -220,7 +219,26 @@ rest
 
 ## 对象
 
-### 反转键值对
+### 遍历
+
+``` javascript
+let obj = {name: "alphardex", age: 24}
+Object.keys(obj)
+["name", "age"]
+Object.values(obj)
+["alphardex", 24]
+Object.entries(obj).map(([key, value])=>`${key}: ${value}`)
+["name: alphardex", "age: 24"]
+```
+
+### 排序
+
+``` javascript
+let data = [{'rank': 2, 'author': 'beta'}, {'rank': 1, 'author': 'alpha'}]
+data.sort((a, b)=>a.rank - b.rank)
+```
+
+### 反转
 
 ``` javascript
 let obj = {name: 'alphardex', age: 24}
@@ -230,29 +248,6 @@ Object.fromEntries(Object.entries(obj).map(([key, value])=>[value, key]))
 // _.invert(obj)
 ```
 
-### 遍历键值对
-
-``` javascript
-let obj = {name: "alphardex", age: 24}
-Object.entries(obj).map(([key, value])=>`${key}: ${value}`)
-["name: alphardex", "age: 24"]
-```
-
-### 键值对排序
-
-``` javascript
-let data = [{'rank': 2, 'author': 'beta'}, {'rank': 1, 'author': 'alpha'}]
-data.sort((a, b)=>a.rank - b.rank)
-```
-
-# OOP
-
-待整理
-
 # 语言专属特性
-
-待整理
-
-# 编程技巧
 
 待整理

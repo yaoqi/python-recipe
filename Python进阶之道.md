@@ -2,25 +2,10 @@
 —— Edsger Wybe Dijkstra
 
 笔者精心整理了许多实用的Python tricks，欢迎各位Pythonistia参考。
-阅读本文前有三点要提醒大家：
-
-1. 请确保你的Python是3.6以上的版本
-2. 本文仅仅谈Python语言本身，标准库请看[另一篇文章](https://zhuanlan.zhihu.com/p/37240446)
-3. 由于篇幅限制，略过了有的需要细讲的地方（生成器和装饰器），如果想进一步了解请参考官方文档或相关书籍
-
-每个优秀的Pythonista都应当遵循The Zen of Python
-
-``` python
->>> import this
-```
-
-<!--more-->
 
 # 基本
 
 ## f-string
-
-速度最快的格式化字符串
 
 ``` python
 >>> name = 'alphardex'
@@ -29,8 +14,6 @@
 ```
 
 ## 三元运算符
-
-将if语句压扁成1行
 
 ``` python
 # if condition:
@@ -54,8 +37,6 @@ fuck if condition else shit
 ```
 
 ## 判断元素的存在性
-
-用in操作符可以判断一个元素是否存在于另一个元素中
 
 ``` python
 >>> 'fuck' in 'fuck you'
@@ -157,8 +138,6 @@ list(filter(lambda e:e, values))
 
 ### 函数参数的打包
 
-在函数中可以说是位置参数和关键字参数的打包
-
 ``` python
 >>> def foo(*args):
 ...     print(args)
@@ -254,23 +233,19 @@ a, b = b, a
 
 ## 字典
 
-### 反转键值对
-
-``` python
->>> d = {'name': 'alphardex', 'age': 24}
->>> {v: k for k, v in d.items()}
-{'alphardex': 'name', 24: 'age'}
-```
-
-### 遍历键值对
+### 遍历
 
 ``` python
 >>> d = {'name': "alphardex", 'age': 24}
+>>> [key for key in d.keys()]
+['name', 'age']
+>>> [value for value in d.values()]
+['alphardex', 24]
 >>> [f'{key}: {value}' for key, value in d.items()]
 ['name: alphardex', 'age: 24']
 ```
 
-### 键值对排序
+### 排序
 
 ``` python
 import operator
@@ -282,15 +257,13 @@ data_by_rank = sorted(data, key=lambda x: x['rank'])
 data_by_rank_desc = sorted(data, key=lambda x: x['rank'], reverse=True)
 ```
 
-# OOP
+### 反转
 
-- super: 实现子类调用父类的方法, super(SuperClass).\_\_init\_\_()
-- 元类: 生产类的工厂，典型的例子是ORM的实现
-- @classmethod和@staticmethod: 前者绑定cls本身，后者啥都不绑定
-- @property: 把类的方法变成属性调用
-- 魔术方法：所有以“\_\_”双下划线包起来的方法，请查阅官方文档，很重要
-- 鸭子类型：关注的不是对象的类型本身，而是它是如何使用的
-- 猴子补丁: 在运行时替换类的方法和属性
+``` python
+>>> d = {'name': 'alphardex', 'age': 24}
+>>> {v: k for k, v in d.items()}
+{'alphardex': 'name', 24: 'age'}
+```
 
 # 语言专属特性
 
@@ -378,16 +351,3 @@ def gathering(users: List[str]) -> str:
 print(greeting('alphardex'))
 print(gathering(['Bitch', 'slut']))
 ```
-
-# 编程技巧
-
-- 善用包管理器管理软件包以及各种库（例如windows系统下的chocolatey、python语言的pip、node.js语言的npm等）
-- 善用IDE或vscode编辑器的代码跳转功能（F12键或者Ctrl+鼠标左键），在使用一个复杂的函数前必须看其源码
-- 善用自省（尤其是dir和help函数），能使你不用去死记函数的功能（因为函数一般都会有完善的文档）
-- 给每一个函数写好docstring
-- 遵循PEP8规范，用好pylint和yapf（分别用于代码的检查和格式化）
-- 善于查阅在线API文档（例如[devdocs.io](https://devdocs.io/)）
-- 搞个能自动补全代码的神器：[ptpython](https://github.com/jonathanslenders/ptpython)
-- 善用google和stackoverflow来解决问题
-- 为了理解Python代码的执行过程，可以用[pythontutor](http://www.pythontutor.com/visualize.html)
-- 英语一定要有底子，起码不能成为读文档的障碍
