@@ -107,20 +107,6 @@ flatten(li)
 # list(flatten(li))
 ```
 
-## 偏函数
-
-用于固定原函数的某些参数，在此基础上造出一个新的函数
-
-``` python
-from functools import partial
-multiply = lambda a, b: a * b
-double = partial(multiply, 2)
-multiply(3, 4)
-# 12
-double(4)
-# 8
-```
-
 ## 星号和双星号
 
 ### 数据容器的合并

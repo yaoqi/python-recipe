@@ -106,19 +106,6 @@ flatten(arr, 2)
 // arr.flat(2)
 ```
 
-## 偏函数
-
-用于固定原函数的某些参数，在此基础上造出一个新的函数
-
-``` javascript
-let multiply = (a, b) => a*b
-let double = a => multiply(a, 2)
-multiply(3, 4)
-// 12
-double(4)
-// 8
-```
-
 ## 扩展运算符
 
 ### 数据结构的合并

@@ -4,6 +4,7 @@
 * [Python]()
   * [Python进阶之道](Python进阶之道.md)
   * [Python标准库一览](Python标准库一览.md)
+  * [Python函数式编程术语大全](Python函数式编程术语大全.md)
 * [爬虫]()
   * [网络爬虫精要](网络爬虫精要.md)
   * [looter——超轻量级爬虫框架](looter——超轻量级爬虫框架.md)
