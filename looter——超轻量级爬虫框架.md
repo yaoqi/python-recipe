@@ -1,7 +1,5 @@
 如今，网上的爬虫教程可谓是泛滥成灾了，从urllib开始讲，最后才讲到requests和selenium这类高级库，实际上，根本就不必这么费心地去了解这么多无谓的东西的。只需记住爬虫总共就三大步骤：发起请求——解析数据——存储数据，这样就足以写出最基本的爬虫了。诸如像Scrapy这样的框架，可以说是集成了爬虫的一切，但是新人可能会用的不怎么顺手，看教程可能还会踩各种各样的坑，而且Scrapy本身体积也有点大。因此，本人决定亲手写一个轻量级的爬虫框架————[looter](https://github.com/alphardex/looter)，里面集成了调试和爬虫模板这两个核心功能，利用looter，你就能迅速地写出一个高效的爬虫。另外，本项目的函数文档也相当完整，如果有不明白的地方可以自行阅读源码（一般都是按Ctrl+左键或者F12）。
 
-<!--more-->
-
 ## 安装
 
 ``` bash
@@ -15,7 +13,7 @@ $ pip install looter
 让我们先来撸一个非常简单的图片爬虫：首先，用shell获取网站
 
 ``` bash
-$ looter shell konachan.com/post
+$ looter shell https://konachan.com/post
 ```
 
 然后用1行代码将图片的url提取出来
@@ -133,21 +131,6 @@ looter为用户提供了一些比较实用的函数。
 >>> data.to_csv()
 ```
 
-### login
-
-有一些网站必须要先登录才能爬取，于是就有了login函数，本质其实就是建立session会话向服务器发送带有data的POST请求。
-考验各位抓包的能力，以下为模拟登录网易126邮箱（要求参数：postdata和param）
-
-``` python
->>> params = {'df': 'mail126_letter', 'from': 'web', 'funcid': 'loginone', 'iframe': '1', 'language': '-1', 'passtype': '1', 'product': 'mail126',
- 'verifycookie': '-1', 'net': 'failed', 'style': '-1', 'race': '-2_-2_-2_db', 'uid': 'webscraping123@126.com', 'hid': '10010102'}
->>> postdata = {'username': 你的用户名, 'savelogin': '1', 'url2': 'http://mail.126.com/errorpage/error126.htm', 'password': 你的密码}
->>> url = "https://mail.126.com/entry/cgi/ntesdoor?"
->>> res, ses = login(url, postdata, params=params) # res为post请求后的页面，ses为请求会话
->>> index_url = re.findall(r'href = "(.*?)"', res.text)[0] # 在res中获取重定向主页的链接
->>> index = ses.get(index_url) # 用ses会话访问重定向链接，想确认成功的话print下即可
-```
-
 ## 套路总结
 
 1. 通过抓包，确认网站是否开放了api，如果有，直接抓取api；如果没有，进入下一步
@@ -156,7 +139,7 @@ looter为用户提供了一些比较实用的函数。
 4. 若网站是动态网页，先抓包试试，尝试获取所有ajax生成的api链接；如果没有api，则进入下一步
 5. 有的网站并不会直接暴露ajax的api链接，这时就需要你自行根据规律，构造出api链接
 6. 如果上一步无法成功，那么就只好用[requestium](https://github.com/tryolabs/requestium)来渲染JS，抓取页面
-7. 至于[模拟登录](https://github.com/xchaoinfo/fuck-login)、[代理IP](https://github.com/imWildCat/scylla)、验证码、分布式等问题，由于范围太广，请自行解决
+7. 至于模拟登录、代理IP、验证码、分布式等问题，由于范围太广，请自行解决
 8. 如果你的爬虫项目被要求用Scrapy，那么你也可以将looter的解析代码无痛地复制到Scrapy上（毕竟都用了parsel）
 
 掌握了以上的套路，再难爬的网站也难不倒你。
