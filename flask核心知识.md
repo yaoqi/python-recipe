@@ -42,6 +42,14 @@ def user_profile(username):
 @app.route('/<any(a, b):var>/')
 ```
 
+如果想通过路由直接访问文件呢？用path转换器和send\_from\_directory就行了
+
+``` python
+@app.route('/uploads/<path:filename>')
+def get_image(filename):
+    return send_from_directory(current_app.config['UPLOAD_PATH'], filename)
+```
+
 ### 构造url
 
 使用url\_for函数可以反向构建访问路由的url
@@ -270,49 +278,6 @@ def log_out():
 
 ## 高级玩法
 
-flask是基于werkzeug实现的，因此有些高级的玩法也得借助它完成
-
-### 自定义路由转换器
-
-我们都知道flask的路由映射是存储在app.url\_map中的，因此查阅官方文档[有关url\_map的部分](http://flask.pocoo.org/docs/1.0/api/?highlight=url_map#flask.Flask.url_map)，就能轻松实现
-
-``` python
-from flask import Flask
-from urllib.parse import unquote
-from werkzeug.routing import BaseConverter
-
-class ListConverter(BaseConverter):
-    def __init__(self, url_map, separator='+'):
-        super().__init__(url_map)
-        self.separator = unquote(separator)
-
-    def to_python(self, value): # 把路径转换成一个Python对象，比如['python', 'javascript', 'sql']
-        return value.split(self.separator)
-
-    def to_url(self, values): # 把参数转换成符合URL的形式，比如/python+javascript+sql/
-        return self.separator.join(BaseConverter.to_url(self, value) for value in values)
-
-app = Flask(__name__)
-app.url_map.converters['list'] = ListConverter
-
-@app.route('/list1/<list:var>/')
-def list1(var):
-    return f'Separator: + {var}'
-
-
-@app.route('/list2/<list(separator=u"|"):var>/')
-def list2(var):
-    return f'Separator: | {var}'
-```
-
-官方文档仅仅用了逗号分隔符，而在这里我们通过添加了separator属性来实现了自定义分隔符
-访问如下链接体验下效果
-
-```
-http://localhost:5000/list1/python+javascript+sql
-http://localhost:5000/list2/python|javascript|sql
-```
-
 ### 强制响应格式
 
 API返回的一般都是json，故在每个视图函数中调用jsonify将dict序列化为json
@@ -380,4 +345,89 @@ app.response_class = XMLResponse
 def rss_feed():
     from rsshub.spiders.feed import ctx
     return render_template('main/atom.xml', ctx())
+```
+
+### 全局模板函数
+
+有的时候你希望把某种逻辑抽象成一个函数，使得多个页面能共用，那么就要定义全局模板函数了
+
+[有的网站](https://nyaa.si/)的排序功能是这么实现的：通过在url的查询字符串中追加sort（要排序的字段）和order（升序还是降序）参数，在视图函数中获取这2个参数并进行相应的排序处理
+
+要实现这个功能，可以编写2个全局函数：1个负责修改url的查询字符串，另一个负责处理给查询排序
+
+``` python
+@bp.app_template_global()
+def modify_querystring(**new_values):
+    args = request.args.copy()
+    for k, v in new_values.items():
+        args[k] = v
+    return f'{request.path}?{url_encode(args)}'
+
+@bp.app_template_global()
+def get_article_query():
+    sort_key = request.args.get('s', 'date')
+    order = request.args.get('o', 'desc')
+    article_query = Article.query
+    if sort_key:
+        if order == 'asc':
+            article_query = article_query.order_by(db.asc(sort_key))
+        else:
+            article_query = article_query.order_by(db.desc(sort_key))
+    return article_query
+```
+
+此外还要定义一个模板宏，这样当用户点击页面上的排序链接时，就能够进行排序了
+
+``` html
+{% macro sort_column(sort_key) %}
+    {% set order = request.args.get('o', 'asc') %}
+    <a href="{% if order == 'desc' %}{{ modify_querystring(s=sort_key, o='asc') }}{% else %}{{ modify_querystring(s=sort_key, o='desc') }}{% endif %}">
+    {{ caller() }}
+    </a>
+{% endmacro %}
+```
+
+``` html
+<th>{% call sort_column('date') %}<div>日期</div>{% endcall %}</th>
+```
+
+### 自定义路由转换器
+
+我们都知道flask的路由映射是存储在app.url\_map中的，因此查阅官方文档[有关url\_map的部分](http://flask.pocoo.org/docs/1.0/api/?highlight=url_map#flask.Flask.url_map)，就能轻松实现
+
+``` python
+from flask import Flask
+from urllib.parse import unquote
+from werkzeug.routing import BaseConverter
+
+class ListConverter(BaseConverter):
+    def __init__(self, url_map, separator='+'):
+        super().__init__(url_map)
+        self.separator = unquote(separator)
+
+    def to_python(self, value): # 把路径转换成一个Python对象，比如['python', 'javascript', 'sql']
+        return value.split(self.separator)
+
+    def to_url(self, values): # 把参数转换成符合URL的形式，比如/python+javascript+sql/
+        return self.separator.join(BaseConverter.to_url(self, value) for value in values)
+
+app = Flask(__name__)
+app.url_map.converters['list'] = ListConverter
+
+@app.route('/list1/<list:var>/')
+def list1(var):
+    return f'Separator: + {var}'
+
+
+@app.route('/list2/<list(separator=u"|"):var>/')
+def list2(var):
+    return f'Separator: | {var}'
+```
+
+官方文档仅仅用了逗号分隔符，而在这里我们通过添加了separator属性来实现了自定义分隔符
+访问如下链接体验下效果
+
+```
+http://localhost:5000/list1/python+javascript+sql
+http://localhost:5000/list2/python|javascript|sql
 ```
