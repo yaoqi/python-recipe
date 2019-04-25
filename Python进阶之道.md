@@ -353,3 +353,55 @@ def gathering(users: List[str]) -> str:
 print(greeting('alphardex'))
 print(gathering(['Bitch', 'slut']))
 ```
+
+## 多重继承
+
+在django中经常要处理类的多重继承的问题，这时就要用到super函数
+
+如果单单认为super仅仅是“调用父类的方法”，那就错了
+
+**其实super指的是MRO中的下一个类**，用来解决多重继承时父类的查找问题
+
+MRO是啥？Method Resolution Order（方法解析顺序）
+
+看完下面的例子，就会理解了
+
+``` python
+class A:
+    def __init__(self):
+        print('A')
+
+class B(A):
+    def __init__(self):
+        print('enter B')
+        super().__init__()
+        print('leave B')
+
+class C(A):
+    def __init__(self):
+        print('enter C')
+        super().__init__()
+        print('leave C')
+
+class D(B, C):
+    pass
+
+d = D()
+# enter B
+# enter C
+# A
+# leave C
+# leave B
+print(d.__class__.__mro__)
+# (<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>)
+```
+
+首先，因为D继承了B类，所以调用B类的\_\_init\_\_，打印了`enter B`
+
+打印`enter B`后的super寻找MRO中的B的下一个类，也就是C类，并调用其\_\_init\_\_，打印`enter C`
+
+打印`enter C`后的super寻找MRO中的C的下一个类，也就是A类，并调用其\_\_init\_\_，打印`A`
+
+打印`A`后回到C的\_\_init\_\_，打印`leave C`
+
+打印`leave C`后回到B的\_\_init\_\_，打印`leave B`
