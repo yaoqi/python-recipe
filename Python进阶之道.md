@@ -288,6 +288,48 @@ d = {'name': 'alphardex', 'age': 24}
 # {'alphardex': 'name', 24: 'age'}
 ```
 
+### 缺失键处理
+
+get返回键值，如果键不在字典中，将会返回一个默认值
+
+``` python
+d = {'name': 'alphardex', 'age': 24}
+d.get('sex', 'male')
+# male
+```
+
+setdefault返回键值，如果键不在字典中，将会添加它并设置一个默认值
+
+``` python
+d = {'name': 'alphardex', 'age': 24}
+# if 'sex' not in d:
+#     d['sex'] = 'male'
+d.setdefault('sex', 'male')
+# male
+d
+# {'name': 'alphardex', 'age': 24, 'sex': 'male'}
+```
+
+### 分组
+
+``` python
+from collections import defaultdict
+people = [('alphardex', 'male'), ('koizumi moeka', 'female'), ('alphardesu', 'male'), ('satou hinata', 'female')]
+gender_group = defaultdict(list)
+for name, gender in people:
+    gender_group[gender].append(name)
+gender_group
+# defaultdict(<class 'list'>, {'male': ['alphardex', 'alphardesu'], 'female': ['koizumi moeka', 'satou hinata']})
+```
+
+实例化一个defaultdict时，通常要传入一个可调用对象（这里以list为例），它会在\_\_getitem\_\_找不到键时被调用，让\_\_getitem\_\_返回某种默认值
+
+向字典插入数据，如果键（假设为`new_key`）不存在，则有以下三步：
+
+1. 调用list来新建一个列表
+2. 把这个新列表作为值，`new_key`作为它的键放到字典中
+3. 返回这个列表的引用
+
 # 语言专属特性
 
 ## 下划线\_的几层含义

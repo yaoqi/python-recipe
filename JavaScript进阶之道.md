@@ -249,6 +249,54 @@ Object.fromEntries(Object.entries(obj).map(([key, value])=>[value, key]))
 // _.invert(obj)
 ```
 
+### 缺失键处理
+
+如果键不在字典中，返回一个默认值，类似Python的dict.get
+
+``` javascript
+let obj = {name: "alphardex", age: 24}
+obj.sex || 'male'
+// male
+```
+
+如果键不在字典中，将会添加它并设置一个默认值，类似Python的dict.setdefault
+
+``` javascript
+let obj = {name: "alphardex", age: 24}
+obj.sex = obj.sex || 'male'
+// "male"
+obj
+// {name: "alphardex", age: 24, sex: "male"}
+```
+
+### 分组
+
+在Python中可以利用defaultdict(list)对数据进行分组
+
+在JS中可以用Proxy来实现defaultdict
+
+``` javascript
+class DefaultDict {
+  constructor(defaultFactory) {
+    return new Proxy({}, {
+      get: (target, name) => name in target ?
+        target[name] :
+        (target[name] = typeof defaultFactory === 'function' ?
+          new defaultFactory().valueOf() :
+          defaultFactory)
+    })
+  }
+}
+
+let people = [['alphardex', 'male'], ['koizumi moeka', 'female'], ['alphardesu', 'male'], ['satou hinata', 'female']]
+let genderGroup = new DefaultDict(Array)
+people.map(([name, gender])=>{genderGroup[gender].push(name)})
+genderGroup.male
+// ["alphardex", "alphardesu"]
+genderGroup.female
+// ["koizumi moeka", "satou hinata"]
+```
+
 # 语言专属特性
 
 待整理
