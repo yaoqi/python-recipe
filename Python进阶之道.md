@@ -53,6 +53,8 @@ name.split(' ')
 
 类似ES6的箭头函数，函数的简化写法，配合map、filter、sorted等高阶函数食用更佳
 
+**注：在Python中，一般更倾向于用列表推导式来替代map和filter**
+
 ``` python
 # def foo(parameters):
 #     return expression
@@ -81,7 +83,20 @@ list(filter(lambda e:e, values))
 tuples = [(1, 'kirito'), (2, 'asuna'), (4, 'alice'), (3, 'eugeo')]
 sorted(tuples, key=lambda x: x[1])
 # [(4, 'alice'), (2, 'asuna'), (3, 'eugeo'), (1, 'kirito')]
+sorted(tuples, key=lambda x: x[1], reverse=True)
+# [(1, 'kirito'), (3, 'eugeo'), (2, 'asuna'), (4, 'alice')]
+tuples.sort()
+tuples
+# [(1, 'kirito'), (2, 'asuna'), (3, 'eugeo'), (4, 'alice')]
 ```
+
+其中，key这个参数接受一个函数，并将其运用在序列里的每一个元素上，所产生的结果将是排序算法依赖的对比关键字
+
+在这个例子中，key里面的函数获取了每个元素的字符串，排序算法将会基于字母顺序进行排序
+
+排序默认是升序，把reverse设置为True，就能按降序排序
+
+sorted会新建一个列表作为返回值，而list.sort则是就地排序
 
 ### 其他骚操作
 
@@ -122,9 +137,10 @@ d2 = {'age': 24}
 # {'name': 'alphardex', 'age': 24}
 ```
 
-### 函数参数的打包
+### 函数参数的打包与解包
 
 ``` python
+# 打包
 def foo(*args):
     print(args)
 foo(1, 2)
@@ -134,6 +150,14 @@ def bar(**kwargs):
     print(kwargs)
 bar(name='alphardex', age=24)
 # {'name': 'alphardex', 'age': 24}
+
+# 解包
+t = (10, 3)
+quotient, remainder = divmod(*t)
+quotient
+# 商：3
+remainder
+# 余：1
 ```
 
 # 数据容器
@@ -252,8 +276,6 @@ data = [{'rank': 2, 'author': 'alphardex'}, {'rank': 1, 'author': 'alphardesu'}]
 data_by_rank = sorted(data, key=operator.itemgetter('rank'))
 data_by_rank
 # [{'rank': 1, 'author': 'alphardesu'}, {'rank': 2, 'author': 'alphardex'}]
-# 其实了解lambda的话也可以这么写：data_by_rank = sorted(data, key=lambda x: x['rank'])
-# sorted的排序默认是asc（升序），可以用reverse选项来实现desc（降序）
 data_by_rank_desc = sorted(data, key=lambda x: x['rank'], reverse=True)
 # [{'rank': 2, 'author': 'alphardex'}, {'rank': 1, 'author': 'alphardesu'}]
 ```
@@ -405,3 +427,79 @@ print(d.__class__.__mro__)
 打印`A`后回到C的\_\_init\_\_，打印`leave C`
 
 打印`leave C`后回到B的\_\_init\_\_，打印`leave B`
+
+## 特殊方法
+
+在django中，定义model的时候，希望admin能显示model的某个字段而不是XXX Object，那么就要定义好\_\_str\_\_
+
+每当你使用一些内置函数时，都是在调用一些特殊方法，例如len()调用了\_\_len\_\_(), str()调用\_\_str\_\_()等
+
+以下实现一个数学向量类，里面有6个特殊方法
+
+``` python
+from math import hypot
+
+class Vector:
+    # 实例创建
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+    # 字符串表示形式
+    def __repr__(self) -> str:
+        return f'Vector({self.x}, {self.y})'
+
+    # 数值转换 - 绝对值
+    def __abs__(self) -> float:
+        return hypot(self.x, self.y)
+
+    # 数值转换 - 布尔值
+    def __bool__(self) -> bool:
+        return bool(abs(self))
+
+    # 算术运算符 - 加
+    def __add__(self, other: Vector) -> Vector:
+        x = self.x + other.x
+        y = self.y + other.y
+        return Vector(x, y)
+
+    # 算术运算符 - 乘
+    def __mul__(self, scalar: float) -> Vector:
+        return Vector(self.x * scalar, self.y * scalar)
+
+v = Vector(3, 4)
+
+# repr(v) => v.__repr__()
+v
+# Vector(3, 4)
+
+# abs(v) => v.__abs__()
+abs(v)
+# 5.0
+
+# bool(v) => v.__bool__()
+bool(v)
+# True
+
+# v1 + v2  => v1.__add__(v2)
+v1 = Vector(1, 2)
+v2 = Vector(3, 4)
+v1 + v2
+# Vector(4, 6)
+
+# v * 3  => v.__mul__(3)
+v * 3
+# Vector(9, 12)
+```
+
+想了解所有的特殊方法可查阅[官方文档](https://docs.python.org/3/reference/datamodel.html#special-method-names),以下列举些常用的：
+
+``` python
+字符串表示形式：__str__, __repr__
+数值转换：__abs__, __bool__, __int__, __float__, __hash__
+集合模拟：__len__, __getitem__, __setitem__, __delitem__, __contains__
+迭代枚举：__iter__, __reversed__, __next__
+可调用模拟：__call__
+实例创建与销毁：__init__, __del__
+运算符相关：__add__, __iadd__, __mul__, __imul__
+```

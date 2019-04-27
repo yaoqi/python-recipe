@@ -104,17 +104,7 @@ def index():
 
 render\_template中第一个参数是要渲染的模板文件名，**其余参数则是上下文变量**
 
-```html
-<h1>{{ greetings }}</h1>
-```
-
 通过mustache语法将上下文变量传入模板并渲染，同时也支持if、for等控制流语句语法，更高级的有过滤器、模板继承、宏等
-
-过滤器的添加格式如下所示
-
-```html
-{{ var|filter }}
-```
 
 提几个常用的过滤器：
 
@@ -374,21 +364,6 @@ def get_article_query():
         else:
             article_query = article_query.order_by(db.desc(sort_key))
     return article_query
-```
-
-此外还要定义一个模板宏，这样当用户点击页面上的排序链接时，就能够进行排序了
-
-``` html
-{% macro sort_column(sort_key) %}
-    {% set order = request.args.get('o', 'asc') %}
-    <a href="{% if order == 'desc' %}{{ modify_querystring(s=sort_key, o='asc') }}{% else %}{{ modify_querystring(s=sort_key, o='desc') }}{% endif %}">
-    {{ caller() }}
-    </a>
-{% endmacro %}
-```
-
-``` html
-<th>{% call sort_column('date') %}<div>日期</div>{% endcall %}</th>
 ```
 
 ### 自定义路由转换器
